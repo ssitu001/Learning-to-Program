@@ -2,6 +2,10 @@
 var currentDate = new Date();
 var kbValues = {};
 
+function getAreaCodes() {
+  return kbValues.areaCodes; 
+}
+
 kbValues.projectName = 'kittenbook';
 kbValues.versionNumber = '0.0.1';
 kbValues.areaCodes = {

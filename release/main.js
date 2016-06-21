@@ -2,6 +2,10 @@
 var currentDate = new Date();
 var kbValues = {};
 
+function getAreaCodes() {
+  return kbValues.areaCodes; 
+}
+
 kbValues.projectName = 'kittenbook';
 kbValues.versionNumber = '0.0.1';
 kbValues.areaCodes = {
@@ -333,6 +337,7 @@ kbValues.currentTime = currentDate.getFullYear() + '-' +
                   currentDate.getMinutes() + ':' + 
                   currentDate.getSeconds();
 
+//Get userName
 function getUserName() {
   var userName = prompt("Hello, what's your name?");
 
@@ -342,31 +347,90 @@ function getUserName() {
   return userName;
 }
 
-var phoneNumber = prompt("Hello, " + userName + " what's your phone number?");
+//Get phoneNumber
+function getPhoneNumber(userName) {
+  var phoneNumber = prompt("Hello, " + userName + " what's your phone number?");
 
-var phoneNumberPattern = /(?:1-)?\(?(\d{3})[\-\)]\d{3}-\d{4}/;
-var phoneMatches = phoneNumberPattern.exec(phoneNumber);
-var areaCode = phoneMatches[1];
-var userLocation = kbValues.areaCodes[areaCode];
-
-var output = '<h1>Hello, ' + userName + 'from' + userLocation + '!</h1>';
-
-if (phoneNumberPattern.test(phoneNumber)) {
-  output =  output + '<p>' + kbValues.projectName + ' ' + kbValues.versionNumber +
-                          ' viewed on: ' + kbValues.currentTime + '</p>';
-} else {
-  output = output + '<h2>That number is invalid: ' + phoneNumber + '</h2>';
+  if (!validatePhoneNumber(phoneNumber)) {
+    phoneNumber = prompt('Please enter a valid phone number');
+  }
+  return phoneNumber;
 }
+
+//Validate the phoneNumbe
+function validatePhoneNumber(phoneNumber) {
+  return phoneNumber.match(/(?:1-)?\(?(\d{3})[\-\)]\d{3}-\d{4}/);
+}
+
+//Determine location based on phone number
+function getLocation(phoneNumber) {
+  //phone pattern
+  var phoneNumberPattern = /(?:1-)?\(?(\d{3})[\-\)]\d{3}-\d{4}/;
+  //get matches from phoneNumber
+  var phoneMatches = phoneNumberPattern.exec(phoneNumber);
+  var areaCodes, areaCode, locationName;
+
+  if(phoneMatches) {
+      areaCode = phoneMatches[1];
+      areaCodes = getAreaCodes();
+      locationName = areaCodes[areaCode];
+  }
+  return locationName ? locationName : "somewhere";
+}
+
+
+//var areaCode = phoneMatches[1];
+//var userLocation = kbValues.areaCodes[areaCode];
+
+// var output = '<h1>Hello, ' + userName + 'from' + userLocation + '!</h1>';
+
+// if (phoneNumberPattern.test(phoneNumber)) {
+//   output =  output + '<p>' + kbValues.projectName + ' ' + kbValues.versionNumber +
+//                           ' viewed on: ' + kbValues.currentTime + '</p>';
+// } else {
+//   output = output + '<h2>That number is invalid: ' + phoneNumber + '</h2>';
+// }
 
 //document.body.innerHTML = output;
 
-var images = document.querySelectorAll('div.userContentWrapper img');
-console.log(images);
 
 
-for (var i = 0; i < images.length; i++) {
-  console.log(images[i].src);
+function getImages () {
+  var images = document.querySelectorAll('div.userContentWrapper img');
+  //console.log(images);
+  for (var i = 0; i < images.length; i++) {
+    console.log(images[i].src);
+  }
+  return images;
 }
+
+
+function getImageHeight(image) {
+  return image.height;
+}
+
+function getImageWidth(image) {
+  return image.width;
+}
+
+function replaceImages(images, location) {
+  var baseImageUrl, height, width, image;
+  switch (location) {
+    case 'somewhere':
+      baseImageUrl = 'http://placepuppy.it/';
+      break;
+    default:
+      baseImageUrl = 'http://placekitten.com/g/';
+      break;
+  }
+  for (var i=0; i < images.length; i++) {
+    image = images[i];
+    height = getImageHeight(image);
+    width = getImageWidth(image);
+    image.src = baseImageUrl + width + '/' + height;
+  }
+}
+
 function main() {
   var userName = getUserName();
   var phoneNumber = getPhoneNumber(userName);
@@ -378,3 +442,5 @@ function main() {
     replaceImages(images, location);
   }, 3000);
 }
+
+main();

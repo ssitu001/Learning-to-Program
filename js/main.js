@@ -9,3 +9,5 @@ function main() {
     replaceImages(images, location);
   }, 3000);
 }
+
+main();

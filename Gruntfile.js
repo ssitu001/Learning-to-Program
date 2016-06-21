@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     //config task here
     concat: {
       release: {
-        src: ['js/values.js', 'js/prompt.js', 'js/getImages.js', 'js/main.js'],
+        src: ['js/values.js', 'js/prompt.js', 'js/getImages.js', 'js/replaceImages.js', 'js/main.js'],
         dest: 'release/main.js'
       }
     },
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['js/values.js', 'js/prompt.js', 'js/getImages.js', 'js/main.js']
+      files: ['js/values.js', 'js/prompt.js', 'js/getImages.js', 'js/replaceImages.js', 'js/main.js']
     },
     watch: {
       files: ['<%= jshint.files %>', 'mainfest.json'],
